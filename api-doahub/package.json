@@ -1,19 +1,18 @@
 {
-  "name": "api-doahub",
+  "name": "doahub-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "API do sistema de doação DoaHub",
+  "main": "server.js",
   "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
-    "express": "^5.2.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "mercadopago": "^2.13.0",
     "mysql2": "^3.22.3"
   }
 }

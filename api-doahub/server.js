@@ -1,100 +1,72 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
-const db = require("./db");
+const { MercadoPagoConfig, Payment } = require("mercadopago");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// ROTA DE CADASTRO
-app.post("/cadastro", async (req, res) => {
-    const { nome, email, senha } = req.body;
-
-    if (!nome || !email || !senha) {
-        return res.status(400).json({
-            mensagem: "Preencha todos os campos"
-        });
-    }
-
-    try {
-        const senhaCriptografada = await bcrypt.hash(senha, 10);
-
-        const sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
-
-        db.query(sql, [nome, email, senhaCriptografada], (erro, resultado) => {
-            if (erro) {
-                if (erro.code === "ER_DUP_ENTRY") {
-                    return res.status(400).json({
-                        mensagem: "Esse email já está cadastrado"
-                    });
-                }
-
-                return res.status(500).json({
-                    mensagem: "Erro ao cadastrar usuário"
-                });
-            }
-
-            res.status(201).json({
-                mensagem: "Usuário cadastrado com sucesso!",
-                id: resultado.insertId
-            });
-        });
-
-    } catch (erro) {
-        res.status(500).json({
-            mensagem: "Erro no servidor"
-        });
-    }
+const client = new MercadoPagoConfig({
+    accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN
 });
 
-// ROTA DE LOGIN
-app.post("/login", (req, res) => {
-    const { email, senha } = req.body;
+const payment = new Payment(client);
 
-    if (!email || !senha) {
-        return res.status(400).json({
-            mensagem: "Preencha email e senha"
+app.get("/", (req, res) => {
+    res.send("API DoaHub rodando com sucesso!");
+});
+
+app.post("/criar-pagamento", async (req, res) => {
+    try {
+        const { nome, email, valor, campanha } = req.body;
+
+        if (!valor || Number(valor) <= 0) {
+            return res.status(400).json({
+                erro: "Valor inválido"
+            });
+        }
+
+        const resposta = await payment.create({
+            body: {
+                transaction_amount: Number(valor),
+                description: `Doação para ${campanha}`,
+                payment_method_id: "pix",
+                payer: {
+                    email: email,
+                    first_name: nome
+                }
+            }
         });
-    }
 
-    const sql = "SELECT * FROM usuarios WHERE email = ?";
+        const dadosPix = resposta.point_of_interaction?.transaction_data;
 
-    db.query(sql, [email], async (erro, resultado) => {
-        if (erro) {
+        if (!dadosPix) {
             return res.status(500).json({
-                mensagem: "Erro no servidor"
-            });
-        }
-
-        if (resultado.length === 0) {
-            return res.status(401).json({
-                mensagem: "Email ou senha incorretos"
-            });
-        }
-
-        const usuario = resultado[0];
-
-        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-
-        if (!senhaCorreta) {
-            return res.status(401).json({
-                mensagem: "Email ou senha incorretos"
+                erro: "QR Code não foi gerado"
             });
         }
 
         res.json({
-            mensagem: "Login realizado com sucesso!",
-            usuario: {
-                id: usuario.id,
-                nome: usuario.nome,
-                email: usuario.email
-            }
+            id: resposta.id,
+            status: resposta.status,
+            qr_code: dadosPix.qr_code,
+            qr_code_base64: dadosPix.qr_code_base64
         });
-    });
+
+    } catch (erro) {
+        console.log("ERRO MERCADO PAGO:", erro);
+
+        res.status(500).json({
+            erro: "Erro ao gerar pagamento",
+            detalhe: erro.message,
+            causa: erro.cause
+        });
+    }
 });
 
 app.listen(3000, () => {
-    console.log("API rodando em http://localhost:3000");
+    console.log("Servidor rodando em http://localhost:3000");
 });

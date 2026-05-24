@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolher Campanha - DoaHub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background: #6a0dad;
+            padding: 10px 0;
+        }
+
+        .navbar-brand img {
+            width: 75px;
+        }
+
+        .hero-doar {
+            background: linear-gradient(135deg, #6a0dad, #1e1e2f);
+            color: white;
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .hero-doar h1 {
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .hero-doar p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #6a0dad;
+            font-weight: bold;
+            margin: 50px 0 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card img {
+            height: 230px;
+            object-fit: cover;
+        }
+
+        .btn-doar {
+            background: #6a0dad;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-doar:hover {
+            background: #5200a3;
+            color: white;
+        }
+
+        .valor {
+            color: #6a0dad;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        footer {
+            background: #1e1e2f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="index.html">
+                <img src="imagem/logo.png" alt="Logo DoaHub">
+            </a>
+
+            <a href="index.html" class="btn btn-light">Voltar</a>
+        </div>
+    </nav>
+
+    <section class="hero-doar">
+        <h1>Escolha uma campanha para ajudar</h1>
+        <p>
+            Sua doação pode levar alimento, água, educação e esperança para quem mais precisa.
+            Escolha uma causa abaixo e faça parte dessa mudança.
+        </p>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">Campanhas disponíveis</h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="imagem/fome.png" class="w-100" alt="Combate à fome">
+
+                    <div class="card-body">
+                        <h4>Combate à fome</h4>
+                        <p>
+                            Ajude famílias que enfrentam dificuldades para conseguir alimentação básica.
+                        </p>
+
+                        <p class="valor">Arrecadado: R$ 0</p>
+
+                        <a href="pagamento.html?campanha=fome" class="btn-doar">
+                            Doar para esta campanha
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="imagem/seca.png" class="w-100" alt="Região em seca">
+
+                    <div class="card-body">
+                        <h4>Região em seca</h4>
+                        <p>
+                            Apoie comunidades afetadas pela falta de água e pela seca extrema.
+                        </p>
+
+                        <p class="valor">Arrecadado: R$ 0</p>
+
+                        <a href="pagamento.html?campanha=seca" class="btn-doar">
+                            Doar para esta campanha
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="imagem/crian.png" class="w-100" alt="Ajuda para crianças">
+
+                    <div class="card-body">
+                        <h4>Ajuda para crianças</h4>
+                        <p>
+                            Contribua com educação, saúde, materiais escolares e bem-estar infantil.
+                        </p>
+
+                        <p class="valor">Arrecadado: R$ 0</p>
+
+                        <a href="pagamento.html?campanha=criancas" class="btn-doar">
+                            Doar para esta campanha
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 DoaHub</p>
+    </footer>
+
+</body>
+</html>

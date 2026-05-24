@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamento - DoaHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f0fa;
+        }
+
+        .topo {
+            background: #6a0dad;
+            padding: 12px 0;
+        }
+
+        .topo img {
+            width: 75px;
+        }
+
+        .area {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            padding: 40px 15px;
+        }
+
+        .card-pagamento {
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .lado-info {
+            background: linear-gradient(135deg, #6a0dad, #1e1e2f);
+            color: white;
+            padding: 40px;
+            height: 100%;
+        }
+
+        .lado-info h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .campanha-box {
+            background: rgba(255,255,255,0.15);
+            padding: 18px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .lado-form {
+            padding: 40px;
+        }
+
+        .lado-form h3 {
+            color: #6a0dad;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 13px;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            border-color: #6a0dad;
+            box-shadow: 0 0 0 0.2rem rgba(106,13,173,0.15);
+        }
+
+        .valores {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .valor-btn {
+            border: 2px solid #6a0dad;
+            color: #6a0dad;
+            background: white;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .valor-btn:hover {
+            background: #6a0dad;
+            color: white;
+        }
+
+        .btn-roxo {
+            background: #6a0dad;
+            color: white;
+            font-weight: bold;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .btn-roxo:hover {
+            background: #5200a3;
+            color: white;
+        }
+
+        .seguro {
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .qr-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .qr-box h4 {
+            color: #6a0dad;
+            font-weight: bold;
+        }
+
+        .qr-img {
+            width: 340px;
+            max-width: 100%;
+            margin: 20px 0;
+        }
+
+        .pix-copia {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .lado-info,
+            .lado-form {
+                padding: 25px;
+            }
+
+            .qr-img {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topo">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html">
+                <img src="imagem/logo.png" alt="Logo DoaHub">
+            </a>
+
+            <a href="doar.html" class="btn btn-light">Voltar</a>
+        </div>
+    </header>
+
+    <main class="area">
+        <div class="container">
+            <div class="card-pagamento">
+                <div class="row g-0">
+
+                    <div class="col-md-5">
+                        <div class="lado-info">
+                            <h2>Sua ajuda pode mudar uma história</h2>
+
+                            <p>
+                                Escolha um valor, gere o Pix e contribua com uma campanha
+                                que está precisando de apoio.
+                            </p>
+
+                            <div class="campanha-box">
+                                <small>Campanha escolhida</small>
+                                <h4 id="nomeCampanha">Campanha escolhida</h4>
+                            </div>
+
+                            <p>
+                                Cada doação, mesmo pequena, pode levar alimento,
+                                água, cuidado e esperança para alguém.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="lado-form">
+                            <h3>Finalizar doação</h3>
+
+                            <form id="formPagamento">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Seu nome</label>
+                                    <input type="text" id="nome" class="form-control" placeholder="Digite seu nome" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Seu email</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Digite seu email" required>
+                                </div>
+
+                                <label class="form-label">Escolha um valor</label>
+
+                                <div class="valores">
+                                    <button type="button" class="valor-btn" onclick="setValor(10)">R$ 10</button>
+                                    <button type="button" class="valor-btn" onclick="setValor(25)">R$ 25</button>
+                                    <button type="button" class="valor-btn" onclick="setValor(50)">R$ 50</button>
+                                    <button type="button" class="valor-btn" onclick="setValor(100)">R$ 100</button>
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="number" id="valor" class="form-control" placeholder="Ou digite outro valor" min="1" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-roxo w-100">
+                                    Gerar QR Code Pix
+                                </button>
+
+                                <p class="seguro">
+                                    Pagamento seguro processado pelo Mercado Pago.
+                                </p>
+
+                            </form>
+
+                            <div id="qr"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+   <script>
+const form = document.getElementById("formPagamento");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const valor = document.getElementById("valor").value;
+    const nomeCampanha = document.getElementById("nomeCampanha").innerText;
+
+    document.getElementById("qr").innerHTML = "<p>Gerando Pix...</p>";
+
+    try {
+        const resposta = await fetch("http://localhost:3000/criar-pagamento", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                valor: valor,
+                campanha: nomeCampanha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            document.getElementById("qr").innerHTML = `
+                <p style="color:red;">Erro ao gerar pagamento</p>
+                <pre>${JSON.stringify(dados, null, 2)}</pre>
+            `;
+            return;
+        }
+
+        document.getElementById("qr").innerHTML = `
+            <div class="qr-box">
+                <h4>Escaneie o QR Code</h4>
+
+                <img src="data:image/png;base64,${dados.qr_code_base64}" class="qr-img">
+
+                <p>Ou copie o código Pix:</p>
+
+                <div class="pix-copia">
+                    ${dados.qr_code}
+                </div>
+            </div>
+        `;
+
+    } catch (erro) {
+        document.getElementById("qr").innerHTML = `
+            <p style="color:red;">Erro ao conectar com o servidor.</p>
+        `;
+    }
+});
+    </script>
+
+</body>
+</html>
